@@ -1,71 +1,47 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import dataJson from "./sample-data.json";
-import { getDevDatafromApi, SampleData } from "./Api";
+import { getDevDatafromApi, SampleData, Row } from "./Api";
 import { useState, useEffect } from "react";
-import BarChart from './components/Bar.jsx';
-import {CategoryScale} from 'chart.js'; 
-
+import BarChart, { IBarData } from "./components/Bar.jsx";
+import DropDown from "./components/DropDown.jsx";
 
 function App() {
   const [devData, setDevData] = useState<SampleData>();
-  //Create Usestates, in a ts way.
+  const [xAxisData, setXAxisData] = useState<IBarData[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const response = await getDevDatafromApi();
       setDevData(response.data);
+      makeXAxisData(response.data.data.AuthorWorklog.rows);
     };
     fetchData();
   }, []);
 
-  
+  const makeXAxisData = (row: Row[]) => {
+    let xAxisList: IBarData[] = []
 
-  useEffect(() => {
-    
-  }, [devData]);
+    row[0].totalActivity.forEach((meta) => {
+      
+      let barData: IBarData = {
+        xValue : meta.name,
+        yValue : meta.value
+      }
 
-  console.log(devData);
+      xAxisList.push(
+        barData
+      )
+    })
 
-  
-    
-  // devData.data.AuthorWorklog.rows.forEach(function (row) {
-  //   // if (!filteredDevData.properties.name) {
-  //   //   filteredDevData.properties.name = [];
-  //   // }
-  //   const filteredNameFromMail = row.name.match(/([A-Za-z]+)(?=\d*@)/)[0];
-  //   const developers = [];
-  //   developers.push(filteredNameFromMail);
-  //   // filteredDevData.properties.name.push(filteredNameFromMail);
-  // });
+    setXAxisData(xAxisList)
+  }
 
-  
-    return (
-      <div className="App">
-        {/* <div className="Dates">
-          <select>
-            {dates.map((date, index) => (
-              <option key={index} value={date}>
-                {date}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="Developers">
-          <select>
-            {developers.map((developer, index) => (
-              <option key={index} value={developer}>
-                {developer}
-              </option>
-            ))}
-          </select>
-        </div> */
-        <BarChart />
-        
-        }
-      </div>
-    );
-  };
+  return (
+    <div className="App">
+      <BarChart barData={xAxisData} />
+      <DropDown />
+    </div>
+  );
+}
 
 export default App;

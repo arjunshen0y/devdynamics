@@ -52,7 +52,7 @@ export interface ActiveDays {
 }
 
 export interface DayWiseActivity {
-    date:  Date;
+    date:  string;
     items: Items;
 }
 
@@ -62,16 +62,16 @@ export interface Items {
 
 export interface Child {
     count:     string;
-    label:     Label;
-    fillColor: FillColor;
+    label:    string;
+    fillColor: string;
 }
 
 export interface TotalActivity {
-    name:  Label;
-    value: string;
+    name:  string;
+    value: number;
 }
 
 export const getDevDatafromApi = async ():Promise<AxiosResponse<SampleData>> => {
-    const url = "https://devdynamics01.free.beeceptor.com/";//Fetch URL. Research Const, Let, Var
+    const url = "./sample-data.json";//Fetch URL. Research Const, Let, Var
     return axios.get<SampleData>(url);
 } 

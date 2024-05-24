@@ -1,18 +1,27 @@
-import React from 'react';
-import Plot from 'react-plotly.js';
+import React from "react";
+import Plot from "react-plotly.js";
 
-const Bar = () => {
+export interface IBarData {
+  xValue: String;
+  yValue: Number;
+}
+
+interface IBarProp {
+  barData: IBarData[]
+}
+
+const Bar = ({barData}: IBarProp) => {
   return (
     <Plot
-    data={[
-      {
-        type: 'bar',
-        x: [],
-        y: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      },
-    ]}
-    layout={{ width: 750, height: 750, title: 'DevDynamics' }}
-  />
+      data={[
+        {
+          type: "bar",
+          x: barData.map(data => data.xValue),
+          y: barData.map(data => data.yValue),
+        },
+      ]}
+      layout={{ width: 750, height: 750, title: "DevDynamics" }}
+    />
   );
 };
 
