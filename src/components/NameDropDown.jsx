@@ -14,9 +14,9 @@ const DropDown = () => {
       </button>
       {isOpen && (
         <ul>
-          <li>Option 1</li>
-          <li>Option 2</li>
-          <li>Option 3</li>
+          {options.map((option, index) => (
+            <li key={index}>{option}</li>
+          ))}
         </ul>
       )}
       
